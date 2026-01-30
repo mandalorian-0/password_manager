@@ -1,12 +1,16 @@
 import tkinter
+from pathlib import Path
+
+PASS_PATH = "vault.txt"
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-# def save():
-#     print(website_entry.get())
-#     print(email_entry.get())
-#     print(password_entry.get())
-
+def save():
+    new_data = f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}\n"
+    file_path = Path(PASS_PATH)
+    saved_data = file_path.read_text()
+    file_path.write_text(saved_data + new_data)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = tkinter.Tk()
@@ -44,7 +48,7 @@ password_entry.grid(row=3, column=1)
 generate_button = tkinter.Button(text="Generate Password")
 generate_button.grid(row=3, column=2)
 
-add_button = tkinter.Button(text="Add", width=36)
+add_button = tkinter.Button(text="Add", width=36, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
 
 window.mainloop()
