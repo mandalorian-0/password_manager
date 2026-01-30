@@ -12,6 +12,12 @@ def save():
     saved_data = file_path.read_text()
     file_path.write_text(saved_data + new_data)
 
+    clear_fields()
+
+def clear_fields():
+    website_entry.delete(0, tkinter.END)
+    password_entry.delete(0, tkinter.END)
+    
 # ---------------------------- UI SETUP ------------------------------- #
 window = tkinter.Tk()
 window.title("Password Manager")
