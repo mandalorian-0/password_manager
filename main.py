@@ -1,10 +1,35 @@
 import tkinter
+import random
+import string
 from tkinter import messagebox
 from pathlib import Path
 
 PASS_PATH = "vault.txt"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+def random_password():
+    # remove text from password field
+    password_entry.delete(0, tkinter.END)
+
+    letters = [letter for letter in string.ascii_letters]
+    numbers = [digit for digit in string.digits]
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_list = [random.choice(letters) for _ in range(nr_letters)]
+    password_list += [random.choice(symbols) for _ in range(nr_symbols)]
+    password_list += [random.choice(numbers) for _ in range(nr_numbers)]
+
+    random.shuffle(password_list)
+
+    password = "".join(password_list)
+
+    password_entry.insert(0, password)
+
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def check_fields():
@@ -71,7 +96,7 @@ password_label.grid(row=3, column=0)
 password_entry = tkinter.Entry(width=21)
 password_entry.grid(row=3, column=1)
 
-generate_button = tkinter.Button(text="Generate Password")
+generate_button = tkinter.Button(text="Generate Password", command=random_password)
 generate_button.grid(row=3, column=2)
 
 add_button = tkinter.Button(text="Add", width=36, command=save)
