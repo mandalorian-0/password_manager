@@ -27,6 +27,10 @@ def random_password():
 
     password = "".join(password_list)
 
+    # copy password to clipboard
+    window.clipboard_append(string=password)
+    window.update()
+
     password_entry.insert(0, password)
 
 
