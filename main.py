@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import messagebox
 from pathlib import Path
 
 PASS_PATH = "vault.txt"
@@ -6,18 +7,37 @@ PASS_PATH = "vault.txt"
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-def save():
-    new_data = f"{website_entry.get()} | {email_entry.get()} | {password_entry.get()}\n"
-    file_path = Path(PASS_PATH)
-    saved_data = file_path.read_text()
-    file_path.write_text(saved_data + new_data)
+def check_fields():
 
-    clear_fields()
+    if all([website_entry.get(), email_entry.get(), password_entry.get()]):
+        return True
+    
+    messagebox.showinfo(title="Password Manager", message="Please don't leave any fields empty!")
+    return False
+
+def save():
+    if check_fields():
+        website = website_entry.get()
+        email = email_entry.get()
+        password = password_entry.get()
+
+        is_ok: bool = messagebox.askokcancel(title=website, message=f"These are the details entered:\nEmail: {email}\n"
+                                                      f"Password: {password}\nIs it ok to save?")
+
+        if is_ok:
+            new_data = f"{website} | {email} | {password}\n"
+                
+            file_path = Path(PASS_PATH)
+            saved_data = file_path.read_text()
+            file_path.write_text(saved_data + new_data)
+
+            clear_fields()
+        
 
 def clear_fields():
     website_entry.delete(0, tkinter.END)
     password_entry.delete(0, tkinter.END)
-    
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = tkinter.Tk()
 window.title("Password Manager")
