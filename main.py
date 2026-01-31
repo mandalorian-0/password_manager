@@ -37,16 +37,20 @@ def random_password():
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-def check_fields():
+def check_fields(*args):
 
-    if all([website_entry.get(), email_entry.get(), password_entry.get()]):
+    if all(args):
         return True
     
-    messagebox.showinfo(title="Password Manager", message="Please don't leave any fields empty!")
+    if len(args) > 1:
+        messagebox.showinfo(title="Oops", message="Please don't leave any fields empty!")
+    else:
+        messagebox.showinfo(title="Oops", message="Please specify a website")
+
     return False
 
 def save():
-    if check_fields():
+    if check_fields(website_entry.get(), email_entry.get(), password_entry.get()):
         website = website_entry.get()
         email = email_entry.get()
         password = password_entry.get()
@@ -97,9 +101,12 @@ canvas.grid(row=0, column=1)
 website_label = tkinter.Label(text="Website:")
 website_label.grid(row=1, column=0)
 
-website_entry = tkinter.Entry(width=35)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = tkinter.Entry(width=21)
+website_entry.grid(row=1, column=1)
 website_entry.focus()
+
+search_button = tkinter.Button(text="Search")
+search_button.grid(row=1, column=2)
 
 email_label = tkinter.Label(text="Email/Username:")
 email_label.grid(row=2, column=0)
@@ -114,7 +121,7 @@ password_label.grid(row=3, column=0)
 password_entry = tkinter.Entry(width=21)
 password_entry.grid(row=3, column=1)
 
-generate_button = tkinter.Button(text="Generate Password", command=random_password)
+generate_button = tkinter.Button(text="Generate", command=random_password)
 generate_button.grid(row=3, column=2)
 
 add_button = tkinter.Button(text="Add", width=36, command=save)
