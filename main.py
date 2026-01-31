@@ -1,10 +1,11 @@
 import tkinter
 import random
 import string
+import json
 from tkinter import messagebox
 from pathlib import Path
 
-PASS_PATH = "vault.txt"
+DATA_PATH = "vault.json"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def random_password():
@@ -54,13 +55,26 @@ def save():
                                                       f"Password: {password}\nIs it ok to save?")
 
         if is_ok:
-            new_data = f"{website} | {email} | {password}\n"
-                
-            file_path = Path(PASS_PATH)
-            saved_data = file_path.read_text()
-            file_path.write_text(saved_data + new_data)
 
-            clear_fields()
+            new_data = {website: {
+                "email": email,
+                "passowrd": password
+            }}
+
+            try:    
+                with open(DATA_PATH, "r") as data_file:
+                    data = json.load(data_file)
+
+            except FileNotFoundError:
+                with open(DATA_PATH, "w") as data_file:
+                    json.dump(new_data, data_file, indent=4)
+            else:
+                data.update(new_data)
+
+                with open(DATA_PATH, "w") as data_file:
+                    json.dump(data, data_file, indent=4)
+            finally:
+                clear_fields()
         
 
 def clear_fields():
