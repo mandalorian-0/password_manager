@@ -61,7 +61,7 @@ def check_fields(*args):
     if len(args) > 1:
         messagebox.showinfo(title="Oops", message="Please don't leave any fields empty!")
     else:
-        messagebox.showinfo(title="Oops", message="Please specify a website")
+        messagebox.showinfo(title="Oops", message="Please specify a website name")
 
     return False
 
