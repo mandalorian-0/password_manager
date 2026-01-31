@@ -7,6 +7,24 @@ from pathlib import Path
 
 DATA_PATH = "vault.json"
 
+# ---------------------------- FIND PASSWORD ---------------------------------- #
+def find_password():
+    website = website_entry.get()
+
+    if check_fields(website):
+        try:
+            with open(DATA_PATH, "r") as data_file:
+                data = json.load(data_file)
+
+                if website.title() in data:
+                    searched_data = data[website.title()]
+                    messagebox.showinfo(title="Result", message=f"Email: {searched_data["email"]}\n"
+                                              f"Password: {searched_data["password"]}")
+                else:
+                    messagebox.showerror(title="Oops", message="No details for this website exists")
+        except FileNotFoundError:
+            messagebox.showerror("No Data File Found")
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def random_password():
     # remove text from password field
@@ -34,8 +52,6 @@ def random_password():
 
     password_entry.insert(0, password)
 
-
-
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def check_fields(*args):
 
@@ -60,9 +76,9 @@ def save():
 
         if is_ok:
 
-            new_data = {website: {
+            new_data = {website.title(): {
                 "email": email,
-                "passowrd": password
+                "password": password
             }}
 
             try:    
@@ -71,7 +87,7 @@ def save():
 
             except FileNotFoundError:
                 with open(DATA_PATH, "w") as data_file:
-                    json.dump(new_data, data_file, indent=4)
+                    json.dump({}, data_file, indent=4)
             else:
                 data.update(new_data)
 
@@ -101,11 +117,11 @@ canvas.grid(row=0, column=1)
 website_label = tkinter.Label(text="Website:")
 website_label.grid(row=1, column=0)
 
-website_entry = tkinter.Entry(width=21)
+website_entry = tkinter.Entry(width=24)
 website_entry.grid(row=1, column=1)
 website_entry.focus()
 
-search_button = tkinter.Button(text="Search")
+search_button = tkinter.Button(width=10 ,text="Search", command=find_password)
 search_button.grid(row=1, column=2)
 
 email_label = tkinter.Label(text="Email/Username:")
@@ -118,10 +134,10 @@ email_entry.insert(0, "test@gmail.com")
 password_label = tkinter.Label(text="Password:")
 password_label.grid(row=3, column=0)
 
-password_entry = tkinter.Entry(width=21)
+password_entry = tkinter.Entry(width=24)
 password_entry.grid(row=3, column=1)
 
-generate_button = tkinter.Button(text="Generate", command=random_password)
+generate_button = tkinter.Button(width=10 ,text="Generate", command=random_password)
 generate_button.grid(row=3, column=2)
 
 add_button = tkinter.Button(text="Add", width=36, command=save)
